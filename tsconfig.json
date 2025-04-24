@@ -1,0 +1,8 @@
+// tsconfig.json
+{
+  "compilerOptions": {
+    // ... other options
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
+}

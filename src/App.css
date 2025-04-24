@@ -24,9 +24,42 @@
   color: white;
 }
 
+.topnav {
+  background-color: #4254a5;
+  overflow: hidden;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
 .App-link {
   color: #61dafb;
 }
+
+table {
+  position: relative;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: none;
+}
+
+#notes td, #notes th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#notes {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#notes tr:nth-child(even){background-color: #f2f2f2;}
 
 @keyframes App-logo-spin {
   from {
