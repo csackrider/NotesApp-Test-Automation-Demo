@@ -23,7 +23,7 @@
     "start-json-server": "npx json-server ./server/db.json --port 3004",
     "start-app": "react-scripts start",
     "build": "react-scripts build",
-    "playwright-test": "npx playwright test",
+    "playwright-test": "npx playwright install && npx playwright test",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",
-    "@types/node": "^22.13.17"
+    "@types/node": "^22.13.17",
+    "playwright": "^1.52.0"
   }
 }
