@@ -1,5 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import {reSeedData} from "./tests/utils/Utils"
 
 /**
  * Read environment variables from file.

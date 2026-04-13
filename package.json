@@ -20,12 +20,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "start": "concurrently -n \"api,web\" -c \"cyan,magenta\" \"npm run start-json-server\" \"npm run start-app\"",
     "start-json-server": "npx json-server ./server/db.json --port 3004",
     "start-app": "react-scripts start",
     "build": "react-scripts build",
-    "playwright-test": "npx playwright install && npx playwright test",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "npx playwright install && npx playwright test"
   },
   "eslintConfig": {
     "extends": [

@@ -33,37 +33,31 @@ export class HomePage {
     }
 
     /**
-     * Deletes a note with the specified title.
-     * @param {string} noteTitle - The title of the note to be deleted.
-     * @returns {Promise<void>} A promise that resolves when the operation is complete.
+     * Deletes the note created in the test using the list row delete link id (`delete_${noteId}`).
      */
-    async deleteNote(noteTitle: string): Promise<void> {
-        await this.page.click("tr:has(td:text('" + noteTitle + "')) a");
+    async deleteNoteById(noteId: string): Promise<void> {
+        await this.page.locator(`#delete_${noteId}`).click();
     }
 
     /**
-     * Edits a note with the specified title and updates its text.
-     * Navigates to the "Edit Note" page, performs the edit, and verifies the changes.
-     * @param {string} noteTitle - The title of the note to be edited.
-     * @param {string} noteText - The new text to update the note with.
-     * @returns {Promise<void>} A promise that resolves when the operation is complete.
+     * Edits a note by id, then opens view for that id and checks the description body.
+     * @param noteId - Server id; matches `edit_${noteId}` / `view_${noteId}` in the list.
+     * @param title - Title to submit on the edit form (usually unchanged from creation).
+     * @param noteText - New note body text.
      */
-    async editNote(noteTitle: string, noteText: string): Promise<void> {
-        // Navigate to the Edit Note page
-        await this.page.locator("tr:has(td:text('" + noteTitle + "'))").locator("td:has(a:text('Edit'))").click();
+    async editNoteById(noteId: string, title: string, noteText: string): Promise<void> {
+        await this.page.locator(`#edit_${noteId}`).click();
         await expect(this.page.locator("h2")).toHaveText("Edit Note");
 
-        // Perform the edit operation
-        let editpage = new EditNotePage(this.page);
-        await editpage.editNote(noteTitle, noteText);
+        const editpage = new EditNotePage(this.page);
+        await editpage.editNote(title, noteText);
 
-        // View the updated note and verify the changes
-        await this.page.locator("tr:has(td:text('" + noteTitle + "'))").locator("td:has(a:text('View'))").click();
-        await expect(this.page.locator('#noteDescription')).toHaveText(noteText);
+        await this.page.locator(`#view_${noteId}`).click();
+        await expect(this.page.locator("#noteDescription")).toHaveText(noteText);
     }
 
-    async goToEditNote(noteTitle: string): Promise<void> {
-        await this.page.locator("tr:has(td:text('" + noteTitle + "'))").locator("td:has(a:text('Edit'))").click();
+    async goToEditNoteById(noteId: string): Promise<void> {
+        await this.page.locator(`#edit_${noteId}`).click();
         await expect(this.page.locator("h2")).toHaveText("Edit Note");
     }
 }
