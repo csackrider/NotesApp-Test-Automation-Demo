@@ -1,9 +1,29 @@
 {
   "notes": [
     {
-      "title": "Test note",
-      "description": "This is just a test note that has some jibberish in it just for testing.\n",
-      "id": "1"
+      "title": "EditNoteRequiredFields",
+      "description": "Some text here",
+      "id": "9805"
+    },
+    {
+      "id": "6842",
+      "title": "AutomatedTest",
+      "description": "Some text here"
+    },
+    {
+      "id": "7c80",
+      "title": "AutomatedTest",
+      "description": "Some text here"
+    },
+    {
+      "id": "5377",
+      "title": "EditNoteRequiredFields",
+      "description": "Some text here"
+    },
+    {
+      "title": "NoteToEdit",
+      "description": "updated text for a test",
+      "id": "e7b9"
     }
   ]
 }

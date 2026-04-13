@@ -1,24 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
-import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import TopNav from './components/TopNav';
 import AddNote from './components/AddNote';
 import ListNotes from './components/ListNotes';
 import EditNote from './components/EditNote';
 import ViewNote from './components/ViewNote';
+
 function App() {
   return (
      <Router>
        <div className="App">
-         <nav className={'topnav'}>
-           <ul className="list-unstyled">
-             <li>
-               <Link id='home' to="/">Home</Link>
-             </li>
-             <li>
-               <Link id='add' to="/add">Add Note</Link>
-             </li>
-           </ul>
-         </nav>
+         <TopNav />
 
          <Routes>
            <Route path="/" element={<ListNotes/>}/>

@@ -1,4 +1,4 @@
-import {expect, Locator, Page} from "@playwright/test";
+import { expect, Locator, Page, type Response } from "@playwright/test";
 
 /**
  * Represents the Add Note Page in the application.
@@ -28,15 +28,39 @@ export class AddNotePage {
     }
 
     /**
+     * Waits for the json-server POST that creates a note and returns the new note id.
+     */
+    private waitForCreateNoteResponse(): Promise<Response> {
+        return this.page.waitForResponse((res) => {
+            if (res.request().method() !== "POST" || !res.ok()) return false;
+            try {
+                const u = new URL(res.url());
+                const hostOk = u.hostname === "localhost" || u.hostname === "127.0.0.1";
+                const pathOk = u.pathname === "/notes" || u.pathname === "/notes/";
+                return hostOk && u.port === "3004" && pathOk;
+            } catch {
+                return false;
+            }
+        });
+    }
+
+    /**
      * Adds a new note by filling in the title and text fields and submitting the form.
      * @param {string} title - The title of the note to be added.
      * @param {string} notetext - The text of the note to be added.
-     * @returns {Promise<void>} A promise that resolves when the operation is complete.
+     * @returns The server-assigned note id (matches `view_${id}`, `edit_${id}`, `delete_${id}` on the list).
      */
-    async addNote(title: string, notetext: string): Promise<void> {
+    async addNote(title: string, notetext: string): Promise<string> {
+        const responsePromise = this.waitForCreateNoteResponse();
         await this.notetitle.fill(title);
         await this.notetext.fill(notetext);
         await this.submitButton.click();
+        const response = await responsePromise;
+        const body = (await response.json()) as { id?: string | number };
+        if (body.id === undefined || body.id === null) {
+            throw new Error("POST /notes response missing id");
+        }
+        return String(body.id);
     }
 
     /**

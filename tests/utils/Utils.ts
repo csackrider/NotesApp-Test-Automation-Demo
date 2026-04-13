@@ -1,6 +1,5 @@
 import * as fs from "node:fs";
 
-
 export async function reSeedData() {
     try {
         const data = fs.readFileSync("./tests/resources/seedData.json", 'utf-8');
