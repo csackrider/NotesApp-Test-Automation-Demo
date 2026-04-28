@@ -20,6 +20,9 @@ jobs:
   launch-agent:
     if: github.event.label.name == 'aidlc_work:unstarted' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
     steps:
       - name: Determine phase from project board
         id: get-phase
