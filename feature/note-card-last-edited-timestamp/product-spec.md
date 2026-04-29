@@ -10,7 +10,7 @@
 | Field | Value |
 |-------|-------|
 | **Feature** | Add “Last edited” timestamp display on each note card |
-| **Status** | Draft / Awaiting approval |
+| **Status** | Awaiting approval |
 | **Author** | GPT-5.4 |
 | **Created** | 2026-04-29 |
 | **Last updated** | 2026-04-29 |
@@ -49,7 +49,7 @@ These tie directly to the **scorecard** in `/ship`. Each should be **testable** 
 |---|-----------|------------------|
 | 1 | A newly created note shows a visible timestamp label on its note card/list entry. | Create a note and confirm the list shows `Created: <date/time>` for that note. |
 | 2 | After a note is edited and saved, its note card/list entry shows `Last edited: <date/time>` instead of only the created label. | Edit an existing note and confirm the list updates to a `Last edited` label for that note. |
-| 3 | Existing notes without prior edit history still render a readable fallback timestamp label instead of a blank or broken state. | Load seeded notes and confirm each note shows either `Created` or `Last edited`. |
+| 3 | Existing notes without prior edit history render a readable `Created` timestamp, including pre-existing seeded notes that require a synthetic/backfilled created time. | Load seeded notes and confirm each note shows either `Created` or `Last edited`. |
 | 4 | Timestamp text is understandable at a glance and does not remove or obscure existing title/actions on the note card/list entry. | Review the list UI before and after the feature and confirm note title and action links remain usable. |
 
 ### Business impact
@@ -70,7 +70,7 @@ Describe **critical paths** from the user’s perspective (not API calls).
 
 - Timestamp wording should be explicit: users should not have to guess whether a date reflects creation or editing.
 - The display should feel lightweight and readable in the list, not visually dominant over the note title.
-- The experience should remain understandable for both newly created notes and older seeded notes.
+- The experience should remain understandable for both newly created notes and older seeded notes, even when older notes use a backfilled created time.
 
 ## Scope
 
@@ -79,7 +79,7 @@ Describe **critical paths** from the user’s perspective (not API calls).
 - Show a timestamp label on each note card/list entry.
 - Display `Last edited: <date/time>` for notes that have been changed after creation.
 - Display `Created: <date/time>` for notes that have never been edited.
-- Support the current seeded/demo notes experience so the list does not show missing timestamp information.
+- Support the current seeded/demo notes experience by showing a backfilled/synthetic `Created` timestamp for pre-existing notes that do not already have timestamp data.
 
 ### Out of scope
 
@@ -96,12 +96,12 @@ Describe **critical paths** from the user’s perspective (not API calls).
 ## Constraints (non-technical where possible)
 
 - The feature should preserve the existing simplicity of the note list and avoid turning timestamp text into the dominant UI element.
-- The wording must remain clear for notes that were never edited.
+- The wording must remain clear for notes that were never edited, including notes using a backfilled created time.
 - The feature must work for both new notes and pre-existing seeded notes used in demos and automated checks.
 
 ## Decisions (optional)
 
-No product decisions have been resolved in chat yet beyond the issue statement. Confirmations from review should be recorded here before approval.
+| 2026-04-29 | Pre-existing seeded notes with no stored timestamp data should display a backfilled/synthetic `Created` timestamp rather than a blank state or unknown label. |
 
 ## Related documents
 
