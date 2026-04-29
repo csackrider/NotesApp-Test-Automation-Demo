@@ -118,6 +118,5 @@ jobs:
                 {
                   \"url\": \"${REPO_URL}\"
                 }
-              ],
-              \"branchName\": \"feature/issue-${ISSUE}-${PHASE}\"
+              ]
             }"
