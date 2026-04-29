@@ -3,7 +3,8 @@
     {
       "title": "Test note",
       "description": "This is just a test note that has some jibberish in it just for testing.\n",
-      "id": "1"
+      "id": "1",
+      "createdAt": "2026-04-01T12:00:00.000Z"
     }
   ]
 }

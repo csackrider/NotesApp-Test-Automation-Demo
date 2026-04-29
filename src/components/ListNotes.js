@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from 'axios';
 import {Link} from "react-router-dom";
+import { getNoteTimestampDetails } from '../utils/formatNoteTimestamp';
 
 const ListNotes = () => {
 	const [notes, setNotes] = useState([]);
@@ -30,22 +31,36 @@ const ListNotes = () => {
 	return (
 		<div><h2>List of Notes</h2>
 			<table id={"notes"}>
-				{notes.map((post) => (
-					<tr key={post.id}>
-						<td id={"notetitle_"+post.id}>
-							{post.title}
-						</td>
-						<td>
-							<Link className={'btn btn-success'} id={'view_'+post.id} to={`/view/${post.id}`}>View</Link>
-						</td>
-						<td>
-							<Link className={'btn btn-warning'} id={'edit_'+post.id} to={`/edit/${post.id}`}>Edit</Link>
-						</td>
-						<td>
-							<Link className={'btn btn-danger'}id={'delete_'+post.id} onClick={() => onDelete(post.id)} >Delete</Link>
-						</td>
-					</tr>
-				))}
+				<tbody>
+					{notes.map((post) => {
+						const timestampDetails = getNoteTimestampDetails(post);
+
+						return (
+							<tr key={post.id}>
+								<td id={"notetitle_"+post.id}>
+									<div>{post.title}</div>
+									{timestampDetails ? (
+										<time
+											id={"notetimestamp_" + post.id}
+											dateTime={timestampDetails.isoString}
+										>
+											{timestampDetails.text}
+										</time>
+									) : null}
+								</td>
+								<td>
+									<Link className={'btn btn-success'} id={'view_'+post.id} to={`/view/${post.id}`}>View</Link>
+								</td>
+								<td>
+									<Link className={'btn btn-warning'} id={'edit_'+post.id} to={`/edit/${post.id}`}>Edit</Link>
+								</td>
+								<td>
+									<Link className={'btn btn-danger'}id={'delete_'+post.id} onClick={() => onDelete(post.id)} >Delete</Link>
+								</td>
+							</tr>
+						);
+					})}
+				</tbody>
 			</table>
 		</div>
 	)
