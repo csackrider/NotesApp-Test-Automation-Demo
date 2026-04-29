@@ -11,6 +11,7 @@ export class AddNotePage {
     readonly addnotelink: Locator;
     readonly notetitle: Locator;
     readonly notetext: Locator;
+    readonly characterCount: Locator;
     readonly submitButton: Locator;
 
     /**
@@ -24,6 +25,7 @@ export class AddNotePage {
         this.addnotelink = page.locator("#add");
         this.notetitle = page.locator("#notetitle");
         this.notetext = page.locator("#notetext");
+        this.characterCount = page.locator("#notetext-character-count");
         this.submitButton = page.locator("#submit");
     }
 
@@ -87,5 +89,9 @@ export class AddNotePage {
             return input.checkValidity();
         });
         expect(isValid).toBeTruthy();
+    }
+
+    async expectCharacterCount(text: string): Promise<void> {
+        await expect(this.characterCount).toHaveText(text);
     }
 }
