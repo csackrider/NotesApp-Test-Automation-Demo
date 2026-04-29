@@ -31,6 +31,17 @@ test("verify add note required fields", async ({ page }) => {
     await addnotepage.verifyRequiredFields();
 });
 
+test("verify add note character count", async ({ page }) => {
+    const homepage = new HomePage(page);
+    await homepage.goToAddNote();
+
+    const addnotepage = new AddNotePage(page);
+    await addnotepage.expectCharacterCount("0 characters");
+
+    await addnotepage.notetext.fill("Line 1\nLine 2");
+    await addnotepage.expectCharacterCount("13 characters");
+});
+
 test("verify deleting a note", async ({ page }) => {
     const homepage = new HomePage(page);
     await homepage.goToAddNote();
@@ -63,4 +74,21 @@ test("verify edit note required fields", async ({ page }) => {
     await homepage.goToEditNoteById(noteId);
     const editnotepage = new EditNotePage(page);
     await editnotepage.verifyRequiredFields();
+});
+
+test("verify edit note character count", async ({ page }) => {
+    const homepage = new HomePage(page);
+    await homepage.goToAddNote();
+
+    const addnotepage = new AddNotePage(page);
+    const initialText = "Seed text";
+    const noteId = await addnotepage.addNote("EditCharacterCount", initialText);
+    await expect(page.locator(`#notetitle_${noteId}`)).toBeVisible({ timeout: 3000 });
+
+    await homepage.goToEditNoteById(noteId);
+    const editnotepage = new EditNotePage(page);
+
+    await editnotepage.expectCharacterCount("9 characters");
+    await editnotepage.notetext.fill("Updated value");
+    await editnotepage.expectCharacterCount("13 characters");
 });
