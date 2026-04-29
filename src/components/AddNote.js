@@ -11,7 +11,11 @@ const AddNote = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:3004/notes', { title, description });
+      await axios.post('http://localhost:3004/notes', {
+        title,
+        description,
+        createdAt: new Date().toISOString(),
+      });
       navigate('/');
     } catch (error) {
       console.error('Error adding note: ', error);

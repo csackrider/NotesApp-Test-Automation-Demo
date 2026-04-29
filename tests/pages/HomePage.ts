@@ -39,6 +39,18 @@ export class HomePage {
         await this.page.locator(`#delete_${noteId}`).click();
     }
 
+    getNoteTitle(noteId: string): Locator {
+        return this.page.locator(`#notetitle_${noteId} > div`);
+    }
+
+    getNoteTimestamp(noteId: string): Locator {
+        return this.page.locator(`#notetimestamp_${noteId}`);
+    }
+
+    async expectTimestampById(noteId: string, expectedText: RegExp | string): Promise<void> {
+        await expect(this.getNoteTimestamp(noteId)).toHaveText(expectedText);
+    }
+
     /**
      * Edits a note by id, then opens view for that id and checks the description body.
      * @param noteId - Server id; matches `edit_${noteId}` / `view_${noteId}` in the list.

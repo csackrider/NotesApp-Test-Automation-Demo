@@ -28,7 +28,11 @@ const EditNote = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put('http://localhost:3004/notes/' + id, { title, description });
+      await axios.patch('http://localhost:3004/notes/' + id, {
+        title,
+        description,
+        updatedAt: new Date().toISOString(),
+      });
       navigate('/');
     } catch (error) {
       console.error('Error editing note: ', error);

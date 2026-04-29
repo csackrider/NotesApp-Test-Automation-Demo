@@ -20,7 +20,8 @@ test("verify adding a note", async ({ page }) => {
     const noteId = await addnotepage.addNote("AutomatedTest", "Some text here");
 
     await expect(page.locator("h2")).toHaveText("List of Notes");
-    await expect(page.locator(`#notetitle_${noteId}`)).toHaveText("AutomatedTest");
+    await expect(page.locator(`#notetitle_${noteId} > div`)).toHaveText("AutomatedTest");
+    await homepage.expectTimestampById(noteId, /^Created: .+/);
 });
 
 test("verify add note required fields", async ({ page }) => {
@@ -48,7 +49,7 @@ test("verify deleting a note", async ({ page }) => {
 
     const addnotepage = new AddNotePage(page);
     const noteId = await addnotepage.addNote("NoteToDelete", "Some text here");
-    await expect(page.locator(`#notetitle_${noteId}`)).toBeVisible({ timeout: 3000 });
+    await expect(page.locator(`#notetitle_${noteId} > div`)).toBeVisible({ timeout: 3000 });
     await homepage.deleteNoteById(noteId);
     await expect(page.locator(`#notetitle_${noteId}`)).toHaveCount(0);
 });
@@ -59,8 +60,9 @@ test("verify editing a note", async ({ page }) => {
 
     const addnotepage = new AddNotePage(page);
     const noteId = await addnotepage.addNote("NoteToEdit", "Some text here");
-    await expect(page.locator(`#notetitle_${noteId}`)).toBeVisible({ timeout: 3000 });
+    await expect(page.locator(`#notetitle_${noteId} > div`)).toBeVisible({ timeout: 3000 });
     await homepage.editNoteById(noteId, "NoteToEdit", "updated text for a test");
+    await homepage.expectTimestampById(noteId, /^Last edited: .+/);
 });
 
 test("verify edit note required fields", async ({ page }) => {
@@ -69,7 +71,7 @@ test("verify edit note required fields", async ({ page }) => {
 
     const addnotepage = new AddNotePage(page);
     const noteId = await addnotepage.addNote("EditNoteRequiredFields", "Some text here");
-    await expect(page.locator(`#notetitle_${noteId}`)).toBeVisible({ timeout: 3000 });
+    await expect(page.locator(`#notetitle_${noteId} > div`)).toBeVisible({ timeout: 3000 });
 
     await homepage.goToEditNoteById(noteId);
     const editnotepage = new EditNotePage(page);
@@ -83,7 +85,7 @@ test("verify edit note character count", async ({ page }) => {
     const addnotepage = new AddNotePage(page);
     const initialText = "Seed text";
     const noteId = await addnotepage.addNote("EditCharacterCount", initialText);
-    await expect(page.locator(`#notetitle_${noteId}`)).toBeVisible({ timeout: 3000 });
+    await expect(page.locator(`#notetitle_${noteId} > div`)).toBeVisible({ timeout: 3000 });
 
     await homepage.goToEditNoteById(noteId);
     const editnotepage = new EditNotePage(page);
@@ -91,4 +93,10 @@ test("verify edit note character count", async ({ page }) => {
     await editnotepage.expectCharacterCount("9 characters");
     await editnotepage.notetext.fill("Updated value");
     await editnotepage.expectCharacterCount("13 characters");
+});
+
+test("verify seeded note shows created timestamp", async ({ page }) => {
+    const homepage = new HomePage(page);
+    await expect(page.locator("#notetitle_1 > div")).toHaveText("Test note");
+    await homepage.expectTimestampById("1", /^Created: .+/);
 });
