@@ -10,7 +10,7 @@
 | Field | Value |
 |-------|-------|
 | **Feature** | Character count display for note text entry |
-| **Status** | Draft - awaiting remaining product clarification and approval |
+| **Status** | Awaiting approval |
 | **Author** | Cursor Cloud Agent |
 | **Created** | 2026-04-29 |
 | **Last updated** | 2026-04-29 |
@@ -45,7 +45,7 @@ These tie directly to the **scorecard** in `/ship`. Each should be **testable** 
 
 | # | Criterion | How we'll verify |
 |---|-----------|------------------|
-| 1 | A character count is shown below the note text editor on note-entry screens | Manual product check on note entry confirms the count is visibly present below the editor |
+| 1 | A character count is shown below the note text editor on note-entry screens, including immediately for existing note text when an edit form finishes loading | Manual product check on add/edit note entry confirms the count is visibly present below the editor and reflects the current text shown in the form |
 | 2 | The count updates immediately as the user types, deletes, pastes, or otherwise changes note text, including spaces and line breaks | Manual interaction check shows the number changes in step with the visible note text exactly as entered |
 | 3 | The count uses simple wording in the format "`N` characters" | Product check confirms the displayed copy matches the agreed format |
 | 4 | Automated end-to-end coverage verifies the count is displayed and updates live | Validate evidence includes a passing Playwright scenario for this behavior |
@@ -61,7 +61,7 @@ This is a small usability improvement rather than a revenue feature. Its value i
 Describe **critical paths** from the user's perspective (not API calls).
 
 1. **Create a note with live length feedback** — A user opens the note creation flow, types into the note text field, and sees a character count below the editor update in real time to reflect the current note text length.
-2. **Edit a note with live length feedback** — A user opens an existing note for editing, sees the current note text represented by a character count, and sees that count update in real time as the text changes.
+2. **Edit a note with live length feedback** — A user opens an existing note for editing, immediately sees a character count that reflects the current note text once the form loads, and sees that count update in real time as the text changes.
 
 ### Experience principles
 
@@ -70,6 +70,7 @@ Describe **critical paths** from the user's perspective (not API calls).
 - The feedback should feel immediate to the user as they type
 - The feature should not interfere with the existing add/edit note workflow
 - The displayed count should reflect the note text exactly as entered, including spaces, pasted text, and line breaks
+- When editing an existing note, the count should appear immediately once the current note text is loaded into the form
 
 ## Scope
 
@@ -80,6 +81,7 @@ Describe **critical paths** from the user's perspective (not API calls).
 - Using the "`N` characters" format described in the issue
 - Capturing this behavior in end-to-end validation
 - Counting the note text exactly as entered, including spaces, pasted text, and line breaks
+- Showing the current count immediately when an existing note is opened for editing
 
 ### Out of scope
 
@@ -108,6 +110,7 @@ Short log of **resolved** product questions from conversation (not a substitute 
 |------|----------|
 | 2026-04-29 | The character count uses the format "`N` characters". |
 | 2026-04-29 | The count includes spaces, line breaks, and pasted text exactly as entered in the note text field. |
+| 2026-04-29 | On the edit screen, the existing note text should show its character count immediately once the form loads. |
 | 2026-04-29 | End-to-end validation must cover this behavior. |
 
 ## Related documents
