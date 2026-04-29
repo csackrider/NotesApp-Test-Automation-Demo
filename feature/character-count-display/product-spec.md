@@ -10,7 +10,7 @@
 | Field | Value |
 |-------|-------|
 | **Feature** | Character count display for note text entry |
-| **Status** | Draft - awaiting product clarification and approval |
+| **Status** | Draft - awaiting remaining product clarification and approval |
 | **Author** | Cursor Cloud Agent |
 | **Created** | 2026-04-29 |
 | **Last updated** | 2026-04-29 |
@@ -46,7 +46,7 @@ These tie directly to the **scorecard** in `/ship`. Each should be **testable** 
 | # | Criterion | How we'll verify |
 |---|-----------|------------------|
 | 1 | A character count is shown below the note text editor on note-entry screens | Manual product check on note entry confirms the count is visibly present below the editor |
-| 2 | The count updates immediately as the user types, deletes, pastes, or otherwise changes note text | Manual interaction check shows the number changes in step with the visible note text |
+| 2 | The count updates immediately as the user types, deletes, pastes, or otherwise changes note text, including spaces and line breaks | Manual interaction check shows the number changes in step with the visible note text exactly as entered |
 | 3 | The count uses simple wording in the format "`N` characters" | Product check confirms the displayed copy matches the agreed format |
 | 4 | Automated end-to-end coverage verifies the count is displayed and updates live | Validate evidence includes a passing Playwright scenario for this behavior |
 
@@ -69,6 +69,7 @@ Describe **critical paths** from the user's perspective (not API calls).
 - The wording should be plain and unambiguous
 - The feedback should feel immediate to the user as they type
 - The feature should not interfere with the existing add/edit note workflow
+- The displayed count should reflect the note text exactly as entered, including spaces, pasted text, and line breaks
 
 ## Scope
 
@@ -78,6 +79,7 @@ Describe **critical paths** from the user's perspective (not API calls).
 - Updating the displayed count as note text changes
 - Using the "`N` characters" format described in the issue
 - Capturing this behavior in end-to-end validation
+- Counting the note text exactly as entered, including spaces, pasted text, and line breaks
 
 ### Out of scope
 
@@ -96,6 +98,7 @@ Describe **critical paths** from the user's perspective (not API calls).
 - The count must be presented below the note text editor, consistent with the issue request
 - The display format must remain simple and readable as "`N` characters"
 - The feature should preserve the current note entry experience rather than redefine it
+- The character total must reflect the note text exactly as entered by the user, including spaces, line breaks, and pasted text
 
 ## Decisions (optional)
 
@@ -104,6 +107,7 @@ Short log of **resolved** product questions from conversation (not a substitute 
 | Date | Decision |
 |------|----------|
 | 2026-04-29 | The character count uses the format "`N` characters". |
+| 2026-04-29 | The count includes spaces, line breaks, and pasted text exactly as entered in the note text field. |
 | 2026-04-29 | End-to-end validation must cover this behavior. |
 
 ## Related documents
