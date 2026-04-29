@@ -30,14 +30,17 @@ import EditNote from './EditNote';
 import ListNotes from './ListNotes';
 
 const mockedAxios = axios;
+const originalTimeZone = process.env.TZ;
 
 describe('note timestamp integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    process.env.TZ = 'America/New_York';
   });
 
   afterEach(() => {
     jest.useRealTimers();
+    process.env.TZ = originalTimeZone;
   });
 
   test('list shows created timestamp for seeded notes', async () => {
@@ -60,6 +63,8 @@ describe('note timestamp integration', () => {
     expect(timestamp).toHaveAttribute('id', 'notetimestamp_1');
     expect(timestamp.tagName).toBe('TIME');
     expect(timestamp).toHaveAttribute('datetime', '2026-04-01T12:00:00.000Z');
+    expect(timestamp).toHaveTextContent('Created: Apr 1, 2026, 8:00 AM');
+    expect(timestamp).not.toHaveTextContent('UTC');
   });
 
   test('list shows last edited timestamp when updatedAt is present', async () => {
@@ -82,6 +87,8 @@ describe('note timestamp integration', () => {
     const timestamp = screen.getByText(/Last edited:/);
     expect(timestamp).toHaveAttribute('id', 'notetimestamp_1');
     expect(timestamp).toHaveAttribute('datetime', '2026-04-29T15:30:00.000Z');
+    expect(timestamp).toHaveTextContent('Last edited: Apr 29, 2026, 11:30 AM');
+    expect(timestamp).not.toHaveTextContent('UTC');
   });
 
   test('add note posts createdAt and navigates back to the list', async () => {
