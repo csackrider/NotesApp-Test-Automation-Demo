@@ -30,17 +30,26 @@ import EditNote from './EditNote';
 import ListNotes from './ListNotes';
 
 const mockedAxios = axios;
-const originalTimeZone = process.env.TZ;
+const originalDateTimeFormat = Intl.DateTimeFormat;
 
 describe('note timestamp integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env.TZ = 'America/New_York';
+    Intl.DateTimeFormat = jest.fn((locale, options) => {
+      const formatter = new originalDateTimeFormat(locale, {
+        ...options,
+        timeZone: 'America/New_York',
+      });
+
+      return {
+        format: formatter.format.bind(formatter),
+      };
+    });
   });
 
   afterEach(() => {
     jest.useRealTimers();
-    process.env.TZ = originalTimeZone;
+    Intl.DateTimeFormat = originalDateTimeFormat;
   });
 
   test('list shows created timestamp for seeded notes', async () => {

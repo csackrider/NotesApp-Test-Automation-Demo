@@ -3,20 +3,27 @@ import {
   getNoteTimestampDetails,
 } from './formatNoteTimestamp';
 
-function runInTimezone(timeZone, callback) {
-  const originalTimeZone = process.env.TZ;
-  process.env.TZ = timeZone;
+function runWithPinnedTimezone(timeZone, callback) {
+  const realDateTimeFormat = Intl.DateTimeFormat;
+  const dateTimeFormatSpy = jest
+    .spyOn(Intl, 'DateTimeFormat')
+    .mockImplementation((locale, options = {}) => {
+      return new realDateTimeFormat(locale, {
+        ...options,
+        timeZone,
+      });
+    });
 
   try {
     callback();
   } finally {
-    process.env.TZ = originalTimeZone;
+    dateTimeFormatSpy.mockRestore();
   }
 }
 
 describe('formatNoteTimestamp', () => {
   test('formats a valid ISO timestamp into readable absolute text', () => {
-    runInTimezone('America/New_York', () => {
+    runWithPinnedTimezone('America/New_York', () => {
       expect(formatNoteTimestamp('2026-04-01T12:00:00.000Z')).toBe(
         'Apr 1, 2026, 8:00 AM'
       );
@@ -30,7 +37,7 @@ describe('formatNoteTimestamp', () => {
 
 describe('getNoteTimestampDetails', () => {
   test('uses createdAt when a note has never been edited', () => {
-    runInTimezone('America/New_York', () => {
+    runWithPinnedTimezone('America/New_York', () => {
       expect(
         getNoteTimestampDetails({
           createdAt: '2026-04-01T12:00:00.000Z',
@@ -45,7 +52,7 @@ describe('getNoteTimestampDetails', () => {
   });
 
   test('prefers updatedAt and last edited label when present', () => {
-    runInTimezone('America/New_York', () => {
+    runWithPinnedTimezone('America/New_York', () => {
       expect(
         getNoteTimestampDetails({
           createdAt: '2026-04-01T12:00:00.000Z',
