@@ -93,6 +93,7 @@ jobs:
           PHASE="${{ steps.get-phase.outputs.phase }}"
           ISSUE="${{ steps.get-phase.outputs.issue }}"
           REPO="${{ github.repository }}"
+          REPO_URL="https://github.com/${REPO}"
           
           # Build the prompt for this phase
           PROMPT="You are running the AIDLC /${PHASE} skill for GitHub issue #${ISSUE} in ${REPO}.
@@ -106,11 +107,17 @@ jobs:
           HARD STOP: Only execute the ${PHASE} phase. Do not plan AND build in one run."
           
           # Call Cursor Cloud Agent API
-          curl -s -X POST "https://api.cursor.com/v1/agents" \
-            -H "Authorization: Bearer $CURSOR_API_KEY" \
+          curl -sS -X POST "https://api.cursor.com/v1/agents" \
+            -u "$CURSOR_API_KEY:" \
             -H "Content-Type: application/json" \
             -d "{
-              \"repository\": \"${REPO}\",
-              \"prompt\": $(echo "$PROMPT" | jq -Rs .),
-              \"branch\": \"feature/issue-${ISSUE}-${PHASE}\"
+              \"prompt\": {
+                \"text\": $(echo "$PROMPT" | jq -Rs .)
+              },
+              \"repos\": [
+                {
+                  \"url\": \"${REPO_URL}\"
+                }
+              ],
+              \"branchName\": \"feature/issue-${ISSUE}-${PHASE}\"
             }"
