@@ -12,7 +12,7 @@
 | **Unit / scope** | Add a live character count to the note text field on the add and edit note routes without changing persistence or routing behavior |
 | **Feature** | `feature/character-count-display/` · GitHub issue `#3` |
 | **Product Spec** | `feature/character-count-display/product-spec.md` |
-| **Status** | Draft - awaiting technical approval |
+| **Status** | Approved for build |
 | **Author** | Cursor Cloud Agent |
 | **Created** | 2026-04-29 |
 | **Last updated** | 2026-04-29 |
@@ -212,3 +212,4 @@ Testing reliability notes:
 | Date | Author | Changes |
 |------|--------|---------|
 | 2026-04-29 | Cursor Cloud Agent | Initial draft from approved Product Spec and design review passes |
+| 2026-04-29 | Cursor Cloud Agent | Marked Tech Spec approved after human design sign-off |
