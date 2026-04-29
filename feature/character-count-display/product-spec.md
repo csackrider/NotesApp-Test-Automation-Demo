@@ -10,7 +10,7 @@
 | Field | Value |
 |-------|-------|
 | **Feature** | Character count display for note text entry |
-| **Status** | Awaiting approval |
+| **Status** | Approved |
 | **Author** | Cursor Cloud Agent |
 | **Created** | 2026-04-29 |
 | **Last updated** | 2026-04-29 |
