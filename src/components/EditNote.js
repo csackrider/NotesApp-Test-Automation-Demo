@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import NoteEditorFields from './NoteEditorFields';
@@ -10,11 +10,7 @@ const EditNote = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  useEffect(() => {
-    fetchNote();
-  }, []);
-
-  const fetchNote = async () => {
+  const fetchNote = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:3004/notes/' + id);
       setDescription(response.data.description);
@@ -23,7 +19,11 @@ const EditNote = () => {
     } catch (error) {
       console.error('Error getting note: ', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchNote();
+  }, [fetchNote]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

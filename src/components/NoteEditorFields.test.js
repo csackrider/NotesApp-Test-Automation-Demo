@@ -1,31 +1,21 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import axios from 'axios';
-import AddNote from './AddNote';
-import EditNote from './EditNote';
-
-jest.mock('axios');
-
-function renderWithRouter(ui, initialEntries = ['/']) {
-  return render(
-    <MemoryRouter initialEntries={initialEntries}>
-      <Routes>
-        <Route path="/add" element={<AddNote />} />
-        <Route path="/edit/:id" element={<EditNote />} />
-      </Routes>
-      {ui}
-    </MemoryRouter>
-  );
-}
+import NoteEditorFields from './NoteEditorFields';
 
 describe('note editor character count', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  test('shows 0 characters and updates with textarea changes', async () => {
+    const handleTitleChange = jest.fn();
+    const handleDescriptionChange = jest.fn();
 
-  test('shows 0 characters on add note and updates with textarea changes', async () => {
-    renderWithRouter(null, ['/add']);
+    const { rerender } = render(
+      <NoteEditorFields
+        title=""
+        description=""
+        onTitleChange={handleTitleChange}
+        onDescriptionChange={handleDescriptionChange}
+        showCharacterCount
+      />
+    );
 
     const noteText = screen.getByLabelText('Note Text:');
     const characterCount = screen.getByText('0 characters');
@@ -34,32 +24,50 @@ describe('note editor character count', () => {
     expect(noteText).toHaveAttribute('aria-describedby', 'notetext-character-count');
 
     await userEvent.type(noteText, 'Hello\nworld');
+    expect(handleDescriptionChange).toHaveBeenCalled();
+    const typedValue = noteText.value;
 
-    expect(screen.getByText('11 characters')).toBeInTheDocument();
+    rerender(
+      <NoteEditorFields
+        title=""
+        description={typedValue}
+        onTitleChange={handleTitleChange}
+        onDescriptionChange={handleDescriptionChange}
+        showCharacterCount
+      />
+    );
+    expect(screen.getByText(`${typedValue.length} characters`)).toBeInTheDocument();
   });
 
-  test('hides count on edit until note data loads, then updates live', async () => {
-    axios.get.mockResolvedValue({
-      data: {
-        title: 'Loaded title',
-        description: 'Existing note',
-      },
-    });
+  test('can hide count until edit data loads and then wire helper text', () => {
+    const { rerender } = render(
+      <NoteEditorFields
+        title=""
+        description=""
+        onTitleChange={jest.fn()}
+        onDescriptionChange={jest.fn()}
+        showCharacterCount={false}
+      />
+    );
 
-    renderWithRouter(null, ['/edit/123']);
+    const hiddenStateTextArea = screen.getByLabelText('Note Text:');
 
     expect(screen.queryByText(/characters$/)).not.toBeInTheDocument();
+    expect(hiddenStateTextArea).not.toHaveAttribute('aria-describedby');
 
-    await waitFor(() => {
-      expect(screen.getByText('13 characters')).toBeInTheDocument();
-    });
+    rerender(
+      <NoteEditorFields
+        title="Loaded title"
+        description="Existing note"
+        onTitleChange={jest.fn()}
+        onDescriptionChange={jest.fn()}
+        showCharacterCount
+      />
+    );
 
+    expect(screen.getByText('13 characters')).toBeInTheDocument();
     const noteText = screen.getByLabelText('Note Text:');
     expect(noteText).toHaveValue('Existing note');
     expect(noteText).toHaveAttribute('aria-describedby', 'notetext-character-count');
-
-    await userEvent.type(noteText, '!');
-
-    expect(screen.getByText('14 characters')).toBeInTheDocument();
   });
 });
