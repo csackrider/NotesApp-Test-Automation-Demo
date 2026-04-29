@@ -157,7 +157,7 @@ jobs:
           echo "Tracking Cursor run status..."
           echo "Agent URL: ${AGENT_URL}"
 
-          MAX_ATTEMPTS=30
+          MAX_ATTEMPTS=180
           SLEEP_SECONDS=10
 
           for ATTEMPT in $(seq 1 $MAX_ATTEMPTS); do
@@ -195,5 +195,7 @@ jobs:
             esac
           done
 
-          echo "Timed out waiting for Cursor run to finish."
-          exit 1
+          echo "Timed out waiting for Cursor run to finish after 30 minutes."
+          echo "Agent is still accessible at: ${AGENT_URL}"
+          echo "Treating timeout as non-fatal so work can continue asynchronously."
+          exit 0
