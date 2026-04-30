@@ -38,7 +38,7 @@ const ListNotes = () => {
 						return (
 							<tr key={post.id}>
 								<td id={"notetitle_"+post.id}>
-									<div>{post.title}</div>
+									<div className="note-list-title">{post.title}</div>
 									{timestampDetails ? (
 										<time
 											id={"notetimestamp_" + post.id}

@@ -100,6 +100,37 @@ describe('note timestamp integration', () => {
     expect(timestamp).not.toHaveTextContent('UTC');
   });
 
+  test('list keeps title wrapper and action links while styling only the title', async () => {
+    mockedAxios.get.mockResolvedValueOnce({
+      data: [
+        {
+          id: '42',
+          title: 'Bold note title',
+          description: 'Existing note',
+          createdAt: '2026-04-01T12:00:00.000Z',
+        },
+      ],
+    });
+
+    render(<ListNotes />);
+
+    const title = await screen.findByText('Bold note title');
+    expect(title.tagName).toBe('DIV');
+    expect(title).toHaveClass('note-list-title');
+
+    const titleCell = title.closest('td');
+    expect(titleCell).toHaveAttribute('id', 'notetitle_42');
+
+    const timestamp = screen.getByText(/Created:/);
+    expect(timestamp.tagName).toBe('TIME');
+    expect(timestamp).toHaveAttribute('id', 'notetimestamp_42');
+    expect(timestamp).not.toHaveClass('note-list-title');
+
+    expect(screen.getByRole('link', { name: 'View' })).toHaveAttribute('id', 'view_42');
+    expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute('id', 'edit_42');
+    expect(screen.getByText('Delete')).toHaveAttribute('id', 'delete_42');
+  });
+
   test('add note posts createdAt and navigates back to the list', async () => {
     jest.useFakeTimers().setSystemTime(new Date('2026-04-29T14:00:00.000Z'));
 
