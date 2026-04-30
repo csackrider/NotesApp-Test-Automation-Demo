@@ -1,12 +1,12 @@
-const timestampFormatter = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: '2-digit',
-  timeZone: 'UTC',
-  timeZoneName: 'short',
-});
+function createTimestampFormatter() {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
 
 export function formatNoteTimestamp(isoString) {
   const date = new Date(isoString);
@@ -15,7 +15,7 @@ export function formatNoteTimestamp(isoString) {
     return null;
   }
 
-  return timestampFormatter.format(date);
+  return createTimestampFormatter().format(date);
 }
 
 export function getNoteTimestampDetails(note) {

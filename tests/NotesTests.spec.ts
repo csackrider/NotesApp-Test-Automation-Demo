@@ -6,6 +6,8 @@ import { EditNotePage } from "./pages/EditNotePage";
 
 test.describe.configure({ mode: "serial" });
 
+const TIMESTAMP_TIMEZONE_ID = "America/New_York";
+
 test.afterAll(async () => {
     await reSeedData();
 });
@@ -106,4 +108,17 @@ test("verify seeded note shows created timestamp", async ({ page }) => {
     const homepage = new HomePage(page);
     await expect(page.locator("#notetitle_1 > div")).toHaveText("Test note");
     await homepage.expectTimestampById("1", /^Created: .+/);
+});
+
+test.describe("timestamp display uses viewer local time", () => {
+    test.use({ timezoneId: TIMESTAMP_TIMEZONE_ID });
+
+    test("verify seeded note shows local created timestamp without UTC suffix", async ({ page }) => {
+        const homepage = new HomePage(page);
+
+        await expect(page.locator("#notetitle_1 > div")).toHaveText("Test note");
+        await homepage.expectTimestampById("1", "Created: Apr 1, 2026, 8:00 AM");
+        await expect(homepage.getNoteTimestamp("1")).not.toContainText("UTC");
+        await expect(homepage.getNoteTimestamp("1")).toHaveAttribute("datetime", "2026-04-01T12:00:00.000Z");
+    });
 });
