@@ -10,7 +10,7 @@
 | Field | Value |
 |-------|-------|
 | **Feature** | Make each note list title bold |
-| **Status** | Awaiting approval |
+| **Status** | Approved |
 | **Author** | GPT-5.4 |
 | **Created** | 2026-04-30 |
 | **Last updated** | 2026-04-30 |
@@ -104,6 +104,7 @@ Describe **critical paths** from the user's perspective (not API calls).
 | Date | Decision |
 |------|----------|
 | 2026-04-30 | The request is scoped to the main note list title that appears above the `Created` or `Last edited` metadata, based on the issue description. |
+| 2026-04-30 | The Product Spec was approved in chat and is ready for a separate `/design` phase handoff. |
 
 ## Related documents
 
