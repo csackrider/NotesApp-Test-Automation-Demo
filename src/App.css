@@ -154,6 +154,10 @@ table {
   width: 100%;
 }
 
+.note-list-title {
+  font-weight: 700;
+}
+
 #notes tr:nth-child(even){background-color: #f2f2f2;}
 
 @keyframes App-logo-spin {
